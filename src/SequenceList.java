@@ -69,7 +69,7 @@ public class SequenceList <T> implements Iterable<T>{
         T[] temp = eles;
         eles = (T[]) new Object[newCapacity];
 
-        for(int i = 0; i < eles.length; i++)
+        for(int i = 0; i < N; i++)
             eles[i] = temp[i];
     }
 
@@ -83,7 +83,7 @@ public class SequenceList <T> implements Iterable<T>{
             eles[index] = eles[index + 1];
         }
 
-        eles[N + 1] = null;
+        eles[N - 1] = null;
         N--;
 
         if(N > 0 && N <= eles.length / 4){
@@ -110,6 +110,5 @@ public class SequenceList <T> implements Iterable<T>{
         public T next(){
             return eles[cursor++];
         }
-
     }
 }

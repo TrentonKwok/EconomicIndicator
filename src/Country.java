@@ -42,4 +42,12 @@ public class Country {
     public void setNominalGDP(double nominalGDP){
         this.nominalGDP = nominalGDP;
     }
+
+    @Override
+    public String toString(){
+        return "Country: " + name +
+                "\n GDP: " + nominalGDP +
+                "\n GDP Growth Rate: " + GDPGrowthRate +
+                "\n CPI: " + inflationRate;
+    }
 }
