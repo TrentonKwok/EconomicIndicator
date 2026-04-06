@@ -44,10 +44,10 @@ public class AVLTree<Key extends Comparable<Key>, Value>{
 
     private Node rightRotate(Node y){
         Node x = y.left;
-        Node T3 = x.right;
+        Node T2 = x.right;
 
         x.right = y;
-        y.left = T3;
+        y.left = T2;
 
         updateHeight(y);
         updateHeight(x);
@@ -264,4 +264,24 @@ public class AVLTree<Key extends Comparable<Key>, Value>{
         System.out.print(x.key + " ");
     }
 
+    public String printTree(){
+        return printTree(root, 0);
+    }
+
+    private String printTree(Node x, int level){
+        if(x == null){
+            return "";
+        }
+
+        String result = "";
+        result = result + printTree(x.left, level + 1);
+        for (int i = 0; i < level; i++){
+            result = result + "              ";
+        }
+
+        result = result + "|-- " + x.key + "\n";
+        result = result + printTree(x.right, level + 1);
+
+        return result;
+    }
 }

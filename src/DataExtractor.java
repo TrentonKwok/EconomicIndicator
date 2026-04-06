@@ -39,7 +39,6 @@ public class DataExtractor {
                 countries.insert(c);
             }
         }
-
         return countries;
     }
 

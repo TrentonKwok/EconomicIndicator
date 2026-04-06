@@ -48,6 +48,12 @@ public class RankedCountry implements Comparable<RankedCountry> {
 
     @Override
     public String toString(){
-        return country.getName() + ": " + getDataValue();
+        if(datatype.equals("GDP")){
+            double trillion = getDataValue() / 1000000000000.0;
+            return country.getName() + ": " + String.format("%.1f" + "T", trillion);
+        }
+        else{
+            return country.getName() + ": " + String.format("%.1f", getDataValue());
+        }
     }
 }
