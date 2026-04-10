@@ -12,6 +12,9 @@ public class RankGUI extends JFrame {
     private JTextArea treeArea;
     private JTextArea infoArea;
 
+    private JComboBox<String> groupBox;
+    private String[] customCountries = null;
+
     private String findCSV(String filename){
         java.io.File f = new java.io.File(filename);
         if(f.exists()){
@@ -31,6 +34,10 @@ public class RankGUI extends JFrame {
         topPanel.add(new JLabel("Year:"));
         yearField = new JTextField("2024", 8);
         topPanel.add(yearField);
+
+        topPanel.add(new JLabel("Group:"));
+        groupBox = new JComboBox<String>(CountryList.ALL_GROUPS);
+        topPanel.add(groupBox);
 
         topPanel.add(new JLabel("Datatype:"));
         datatypeBox = new JComboBox<String>();
@@ -70,6 +77,16 @@ public class RankGUI extends JFrame {
                 buildBST();
             }
         });
+
+        groupBox.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                String selected = (String) groupBox.getSelectedItem();
+                if("CUSTOM".equals(selected)){
+                    showCustomWindow();
+                }
+            }
+        });
     }
 
     private void buildTree(){
@@ -77,7 +94,9 @@ public class RankGUI extends JFrame {
         String datatype = (String) datatypeBox.getSelectedItem();
         try{
             DataExtractor DE = new DataExtractor();
+            CountryList group = getSelectedGroup();
             SequenceList<Country> countries = DE.extractCountry(
+                    group,
                     findCSV("Z_GDP.csv"),
                     findCSV("Z_Growth.csv"),
                     findCSV("Z_CPI.csv"),
@@ -93,7 +112,7 @@ public class RankGUI extends JFrame {
             treeArea.setText(tree.printTree());
 
             String info = "";
-            info = info + "Group: OECD\n";
+            info = "Group: " + groupBox.getSelectedItem() + "\n";
             info = info + "Year: " + year + "\n";
             info = info + "Datatype: " + datatype + "\n";
             info = info + "Country count: " + countries.length() + "\n";
@@ -102,7 +121,6 @@ public class RankGUI extends JFrame {
             infoArea.setText(info);
         }
         catch (Exception e){
-            e.printStackTrace();
             treeArea.setText("");
             infoArea.setText("Error: " + e.getMessage());
         }
@@ -112,8 +130,15 @@ public class RankGUI extends JFrame {
         String year = yearField.getText();
         String datatype = (String) datatypeBox.getSelectedItem();
         try{
+            CountryList group = getSelectedGroup();
             DataExtractor DE = new DataExtractor();
-            SequenceList<Country> countries = DE.extractCountry("src/Z_GDP.csv", "src/Z_Growth.csv", "src/Z_CPI.csv", year);
+            SequenceList<Country> countries = DE.extractCountry(
+                    group,
+                    findCSV("Z_GDP.csv"),
+                    findCSV("Z_Growth.csv"),
+                    findCSV("Z_CPI.csv"),
+                    year
+            );
             BST<RankedCountry, Country> tree = new BST<RankedCountry, Country>();
             for(int i = 0; i < countries.length(); i++){
                 Country c = countries.get(i);
@@ -124,7 +149,7 @@ public class RankGUI extends JFrame {
             treeArea.setText(tree.printTree());
 
             String info = "";
-            info = info + "Group: OECD\n";
+            info = info + "Group: " + groupBox.getSelectedItem() + "\n";
             info = info + "Year: " + year + "\n";
             info = info + "Datatype: " + datatype + "\n";
             info = info + "Country count: " + countries.length() + "\n";
@@ -135,6 +160,60 @@ public class RankGUI extends JFrame {
         catch (Exception e){
             treeArea.setText("");
             infoArea.setText("Error happened.");
+        }
+    }
+
+    private CountryList getSelectedGroup(){
+        String groupName = (String) groupBox.getSelectedItem();
+        if("CUSTOM".equals(groupName)){
+            CountryList custom = new CountryList("CUSTOM");
+            if(customCountries != null){
+                for(int i = 0; i < customCountries.length; i++){
+                    custom.addCountry(customCountries[i]);
+                }
+            }
+            return custom;
+        }
+        return new CountryList(groupName);
+    }
+
+    private void showCustomWindow(){
+        String[] all = CountryList.getAllAvailableCountries();
+        JCheckBox[] boxes = new JCheckBox[all.length];
+
+        JPanel panel = new JPanel(new GridLayout(0, 3, 5, 2));
+        for(int i = 0; i < all.length; i++){
+            boxes[i] = new JCheckBox(all[i]);
+            if(customCountries != null){
+                for(int j = 0; j < customCountries.length; j++){
+                    if(customCountries[j].equals(all[i])){
+                        boxes[i].setSelected(true);
+                    }
+                }
+            }
+            panel.add(boxes[i]);
+        }
+
+        JScrollPane scroll = new JScrollPane(panel);
+        scroll.setPreferredSize(new Dimension(720, 420));
+
+        int result = JOptionPane.showConfirmDialog(
+                this, scroll,
+                "Select countries for Custom group",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE);
+
+        if(result == JOptionPane.OK_OPTION){
+            SequenceList<String> selected = new SequenceList<String>(all.length);
+            for(int i = 0; i < boxes.length; i++){
+                if(boxes[i].isSelected()){
+                    selected.insert(all[i]);
+                }
+            }
+            customCountries = new String[selected.length()];
+            for(int i = 0; i < selected.length(); i++){
+                customCountries[i] = selected.get(i);
+            }
         }
     }
 

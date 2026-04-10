@@ -6,7 +6,7 @@ public class Test {
     }
 
     private static void dayA(){
-        CountryList oecdList = new CountryList();
+        CountryList oecdList = new CountryList("OECD");
         System.out.println("The " + oecdList.getCountryListNumber() + " OCED Countries: ");
         System.out.println(oecdList);
 
@@ -15,6 +15,18 @@ public class Test {
 
         System.out.println("Japan: " + (oecdList.isOECD("Japan") ? "Yes" : "No"));
         System.out.println("China: " + (oecdList.isOECD("China") ? "Yes" : "No"));
+
+        System.out.println("-------------------");
+
+        CountryList g20List = new CountryList("G20");
+        System.out.println("The " + g20List.getCountryListNumber() + " G20 Countries: ");
+        System.out.println(g20List);
+
+        System.out.println("-------------------");
+
+        CountryList developingList = new CountryList("DEVELOPING");
+        System.out.println("The " + developingList.getCountryListNumber() + " Developing Countries: ");
+        System.out.println(developingList);
     }
 
     private static void dayB(){
@@ -25,7 +37,7 @@ public class Test {
         String growthFile = "Z_Growth.csv";
 
         try{
-            SequenceList<Country> testData = DE.extractCountry(findCSV(GDPFile), findCSV(growthFile), findCSV(CPIFile), "2023");
+            SequenceList<Country> testData = DE.extractCountry(new CountryList("OECD"), findCSV(GDPFile), findCSV(growthFile), findCSV(CPIFile), "2023");
             for (Country c : testData){
                 System.out.println("----------------");
                 System.out.println(c);

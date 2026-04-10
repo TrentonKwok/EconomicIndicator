@@ -20,27 +20,32 @@ public class DataExtractor {
         }
     }
 
-    public SequenceList<Country> extractCountry(String GDPFile, String growthFile, String inflationFile, String year) throws Exception{
-        CountryList oecdlist = new CountryList();
+    public SequenceList<Country> extractCountry(CountryList group, String GDPFile, String growthFile, String inflationFile, String year) throws Exception{
         AVLTree<String, TempCountry> table = new AVLTree<>();
         SequenceList<String> countryNames = new SequenceList<>(100);
 
-        readFile(GDPFile, year, oecdlist, table, countryNames, "GDP");
-        readFile(growthFile, year, oecdlist, table, countryNames, "GROWTH");
-        readFile(inflationFile, year, oecdlist, table, countryNames, "INFLATION");
+        readFile(GDPFile, year, group, table, countryNames, "GDP");
+        readFile(growthFile, year, group, table, countryNames, "GROWTH");
+        readFile(inflationFile, year, group, table, countryNames, "INFLATION");
 
         SequenceList<Country> countries = new SequenceList<Country>(100);
 
         for(int i = 0; i < countryNames.length(); i++){
             String countryName = countryNames.get(i);
-            TempCountry temp =table.get(countryName);
+            TempCountry temp = table.get(countryName);
             if (temp.isComplete()){
-                Country c = new Country(temp.countryName, temp.nominalGDP, temp.GDPGrowthRate, temp.inflationRate);;
+                Country c = new Country(temp.countryName, temp.nominalGDP, temp.GDPGrowthRate, temp.inflationRate);
                 countries.insert(c);
             }
         }
         return countries;
     }
+
+    public SequenceList<Country> extractCountry(String GDPFile, String growthFile, String inflationFile, String year) throws Exception{
+        return extractCountry(new CountryList("OECD"), GDPFile, growthFile, inflationFile, year);
+    }
+
+
 
     private void readFile(String file, String year, CountryList choiceCountries, AVLTree<String, TempCountry> table, SequenceList<String> countryNames, String dataType) throws Exception{
         BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -74,7 +79,7 @@ public class DataExtractor {
             String yearDatum = dataList[yearIndex].trim();
             String gottenValue = dataList[valueIndex].trim();
 
-            if(!choiceCountries.isOECD(countryName)){
+            if(!choiceCountries.contains(countryName)){
                 continue;
             }
 

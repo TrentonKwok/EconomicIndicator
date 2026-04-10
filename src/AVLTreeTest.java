@@ -170,6 +170,8 @@ public class AVLTreeTest {
         tree.put(2, "b");
         tree.delete(99);
         assertEquals(2, tree.size());
+        assertEquals("a", tree.get(1));
+        assertEquals("b", tree.get(2));
     }
 
     @Test
@@ -221,7 +223,7 @@ public class AVLTreeTest {
         for(int i = 1; i <= 1000; i++){
             tree.put(i, i);
         }
-        double maxHeight = 1.44 * (Math.log(1002) / Math.log(2));
+        double maxHeight = 1.44 * (Math.log(tree.size() + 2) / Math.log(2));
         assertTrue(tree.height() <= maxHeight);
         assertEquals(1000, tree.size());
     }
