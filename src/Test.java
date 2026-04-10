@@ -19,12 +19,13 @@ public class Test {
 
     private static void dayB(){
         DataExtractor DE = new DataExtractor();
-        String CPIFile = "src/Z_CPI.csv";
-        String GDPFile = "src/Z_GDP.csv";
-        String growthFile = "src/Z_Growth.csv";
+
+        String CPIFile = "Z_CPI.csv";
+        String GDPFile = "Z_GDP.csv";
+        String growthFile = "Z_Growth.csv";
 
         try{
-            SequenceList<Country> testData = DE.extractCountry(GDPFile, growthFile, CPIFile, "2023");
+            SequenceList<Country> testData = DE.extractCountry(findCSV(GDPFile), findCSV(growthFile), findCSV(CPIFile), "2023");
             for (Country c : testData){
                 System.out.println("----------------");
                 System.out.println(c);
@@ -65,5 +66,13 @@ public class Test {
 
         System.out.print("Postorder: ");
         tree.postorder();
+    }
+
+    private static String findCSV(String filename){
+        java.io.File f = new java.io.File(filename);
+        if(f.exists()){
+            return filename;
+        }
+        return "src/" + filename;
     }
 }

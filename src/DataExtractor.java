@@ -22,7 +22,7 @@ public class DataExtractor {
 
     public SequenceList<Country> extractCountry(String GDPFile, String growthFile, String inflationFile, String year) throws Exception{
         CountryList oecdlist = new CountryList();
-        SymbolTable<String, TempCountry> table = new SymbolTable<>();
+        AVLTree<String, TempCountry> table = new AVLTree<>();
         SequenceList<String> countryNames = new SequenceList<>(100);
 
         readFile(GDPFile, year, oecdlist, table, countryNames, "GDP");
@@ -42,7 +42,7 @@ public class DataExtractor {
         return countries;
     }
 
-    private void readFile(String file, String year, CountryList choiceCountries, SymbolTable<String, TempCountry> table, SequenceList<String> countryNames, String dataType) throws Exception{
+    private void readFile(String file, String year, CountryList choiceCountries, AVLTree<String, TempCountry> table, SequenceList<String> countryNames, String dataType) throws Exception{
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String topicLine = reader.readLine();
         String[] topicList = splitLine(topicLine);
