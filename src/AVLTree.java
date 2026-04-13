@@ -1,4 +1,6 @@
-public class AVLTree<Key extends Comparable<Key>, Value>{
+import java.util.Iterator;
+
+public class AVLTree<Key extends Comparable<Key>, Value> implements Iterable<Value>{
     private Node root;
     private int N;
 
@@ -284,4 +286,36 @@ public class AVLTree<Key extends Comparable<Key>, Value>{
 
         return result;
     }
+
+    public Iterator<Value> iterator() {
+        return new InorderIterator();
+    }
+
+    private class InorderIterator implements Iterator<Value> {
+        private SequenceList<Node> stack;
+
+        public InorderIterator() {
+            stack = new SequenceList<>(height() + 1);
+            pushLeft(root);
+        }
+
+        private void pushLeft(Node x) {
+            while (x != null) {
+                stack.insert(x);
+                x = x.left;
+            }
+        }
+
+        public boolean hasNext() {
+            return stack.length() > 0;
+        }
+
+        public Value next() {
+            Node x = stack.remove(stack.length() - 1);
+            pushLeft(x.right);
+            return x.value;
+        }
+    }
+
+
 }

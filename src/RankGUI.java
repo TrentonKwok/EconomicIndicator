@@ -184,13 +184,6 @@ public class RankGUI extends JFrame {
         JPanel panel = new JPanel(new GridLayout(0, 3, 5, 2));
         for(int i = 0; i < all.length; i++){
             boxes[i] = new JCheckBox(all[i]);
-            if(customCountries != null){
-                for(int j = 0; j < customCountries.length; j++){
-                    if(customCountries[j].equals(all[i])){
-                        boxes[i].setSelected(true);
-                    }
-                }
-            }
             panel.add(boxes[i]);
         }
 

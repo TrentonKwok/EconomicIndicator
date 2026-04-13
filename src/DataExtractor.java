@@ -22,17 +22,15 @@ public class DataExtractor {
 
     public SequenceList<Country> extractCountry(CountryList group, String GDPFile, String growthFile, String inflationFile, String year) throws Exception{
         AVLTree<String, TempCountry> table = new AVLTree<>();
-        SequenceList<String> countryNames = new SequenceList<>(100);
 
-        readFile(GDPFile, year, group, table, countryNames, "GDP");
-        readFile(growthFile, year, group, table, countryNames, "GROWTH");
-        readFile(inflationFile, year, group, table, countryNames, "INFLATION");
+
+        readFile(GDPFile, year, group, table, "GDP");
+        readFile(growthFile, year, group, table,  "GROWTH");
+        readFile(inflationFile, year, group, table,  "INFLATION");
 
         SequenceList<Country> countries = new SequenceList<Country>(100);
 
-        for(int i = 0; i < countryNames.length(); i++){
-            String countryName = countryNames.get(i);
-            TempCountry temp = table.get(countryName);
+        for(TempCountry temp : table){
             if (temp.isComplete()){
                 Country c = new Country(temp.countryName, temp.nominalGDP, temp.GDPGrowthRate, temp.inflationRate);
                 countries.insert(c);
@@ -47,7 +45,7 @@ public class DataExtractor {
 
 
 
-    private void readFile(String file, String year, CountryList choiceCountries, AVLTree<String, TempCountry> table, SequenceList<String> countryNames, String dataType) throws Exception{
+    private void readFile(String file, String year, CountryList choiceCountries, AVLTree<String, TempCountry> table, String dataType) throws Exception{
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String topicLine = reader.readLine();
         String[] topicList = splitLine(topicLine);
@@ -92,7 +90,6 @@ public class DataExtractor {
             if(temp == null){
                 temp = new TempCountry(countryName);
                 table.put(countryName, temp);
-                countryNames.insert(countryName);
             }
 
             if(dataType.equals("GDP")){

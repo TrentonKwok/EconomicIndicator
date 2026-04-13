@@ -49,10 +49,10 @@ public class Test {
     }
 
     private static void dayC(){
-        Country japan = new Country("Japan", 4213.0, 0.2, 2.1);
-        Country germany = new Country("Germany", 4710.0, 0.1, 2.4);
-        Country france = new Country("France", 3200.0, 1.1, 2.3);
-        Country korea = new Country("Korea", 3200.0, 0.9, 2.0);
+        Country japan = new Country("Japan", 4213000000000.0, 0.2, 2.1);
+        Country germany = new Country("Germany", 4710000000000.0, 0.1, 2.4);
+        Country france = new Country("France", 3900000000000.0, 1.1, 2.3);
+        Country korea = new Country("Korea", 3000000000000.0, 0.9, 2.0);
         RankedCountry a = new RankedCountry(japan, "GDP");
         RankedCountry b = new RankedCountry(germany, "GDP");
         RankedCountry c = new RankedCountry(france, "GDP");

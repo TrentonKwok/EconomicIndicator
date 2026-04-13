@@ -175,7 +175,7 @@ public class AVLTreeTest {
     }
 
     @Test
-    public void testDeleteRebalance(){
+    public void testDeleteLLRebalance(){
         AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
         tree.put(20, "a");
         tree.put(10, "b");
@@ -188,6 +188,42 @@ public class AVLTreeTest {
         assertEquals("b", tree.get(10));
         assertEquals("d", tree.get(5));
         assertEquals("a", tree.get(20));
+    }
+
+    @Test
+    public void testDeleteRRRebalance(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        tree.put(20, "a");
+        tree.put(10, "b");
+        tree.put(30, "c");
+        tree.put(40, "d");
+        tree.delete(10);
+        assertEquals(2, tree.height());
+        assertEquals(3, tree.size());
+    }
+
+    @Test
+    public void testDeleteLRRebalance(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        tree.put(20, "a");
+        tree.put(10, "b");
+        tree.put(30, "c");
+        tree.put(15, "d");
+        tree.delete(30);
+        assertEquals(2, tree.height());
+        assertEquals(3, tree.size());
+    }
+
+    @Test
+    public void testDeleteRLRebalance(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        tree.put(20, "a");
+        tree.put(10, "b");
+        tree.put(30, "c");
+        tree.put(25, "d");
+        tree.delete(10);
+        assertEquals(2, tree.height());
+        assertEquals(3, tree.size());
     }
 
     @Test
@@ -226,5 +262,31 @@ public class AVLTreeTest {
         double maxHeight = 1.44 * (Math.log(tree.size() + 2) / Math.log(2));
         assertTrue(tree.height() <= maxHeight);
         assertEquals(1000, tree.size());
+    }
+
+    @Test
+    public void testIteratorOrder(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        tree.put(3, "c");
+        tree.put(1, "a");
+        tree.put(5, "e");
+        tree.put(2, "b");
+        tree.put(4, "d");
+
+        String result = "";
+        for(String value : tree){
+            result = result + value;
+        }
+        assertEquals("abcde", result);
+    }
+
+    @Test
+    public void testIteratorSize(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        int count = 0;
+        for(String value : tree){
+            count++;
+        }
+        assertEquals(0, count);
     }
 }
