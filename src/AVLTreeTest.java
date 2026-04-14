@@ -290,7 +290,8 @@ public class AVLTreeTest {
         assertEquals(0, count);
     }
 
-    public void testIteratorSize(){         // 新增
+    @Test
+    public void testIteratorSize(){
         AVLTree<Integer, Integer> tree = new AVLTree<Integer, Integer>();
         for(int i = 1; i <= 100; i++){
             tree.put(i, i * 10);
