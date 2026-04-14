@@ -11,12 +11,12 @@ An AVL tree keeps itself balanced by using rotations after insertions and deleti
 Because of this, operations such as search, insertion, and deletion stay efficient.
 
 ## Files
-- `AVLTree.java` — AVL tree implementation
+- `AVLTree.java` — AVL tree implementation, it can use iterator
 - `BST.java` — Regular binary search tree used for comparison
 - `Country.java` — Stores country data such as GDP, growth rate, and inflation
 - `RankedCountry.java` — Wraps a country and a selected metric so it can be used as a tree key
 - `CountryList.java` — Stores the selected country group (such as OECD, G7, G20, BRICS, or custom)
-- `DataExtractor.java` — Reads and parses CSV data files
+- `DataExtractor.java` — Reads and parses CSV data files, uses AVL tree Iterator for traversal
 - `SequenceList.java` — Simple dynamic array list implementation
 - `SymbolTable.java` — Symbol table used in the project
 - `RankGUI.java` — GUI for building and visualizing the AVL tree and BST

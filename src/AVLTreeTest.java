@@ -281,12 +281,24 @@ public class AVLTreeTest {
     }
 
     @Test
-    public void testIteratorSize(){
+    public void testIteratorEmpty(){
         AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
         int count = 0;
         for(String value : tree){
             count++;
         }
         assertEquals(0, count);
+    }
+
+    public void testIteratorSize(){         // 新增
+        AVLTree<Integer, Integer> tree = new AVLTree<Integer, Integer>();
+        for(int i = 1; i <= 100; i++){
+            tree.put(i, i * 10);
+        }
+        int count = 0;
+        for(Integer value : tree){
+            count++;
+        }
+        assertEquals(100, count);
     }
 }

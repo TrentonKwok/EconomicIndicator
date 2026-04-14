@@ -155,10 +155,6 @@ public class CountryList {
         }
     }
 
-    public boolean isOECD(String countryName){
-        return countryList.indexOf(countryName) != -1;
-    }
-
     public int getCountryListNumber(){
         return countryList.length();
     }
