@@ -399,9 +399,22 @@ public class AVLTree<Key extends Comparable<Key>, Value> implements Iterable<Val
     }
 
 
+
     public Iterator<Value> iterator() {   // The default would be InorderIterator
         return new InorderIterator();
     }
+
+    public Iterator<Value> preorderIterator(){
+        return new PreorderIterator();
+    }
+
+    public Iterator<Value> postorderIterator(){
+        return new PostorderIterator();
+    }
+
+
+
+
 
     private class InorderIterator implements Iterator<Value> {
         private SequenceList<Node> stack;
@@ -457,13 +470,7 @@ public class AVLTree<Key extends Comparable<Key>, Value> implements Iterable<Val
         }
     }
 
-    public Iterator<Value> preorderIterator(){
-        return new PreorderIterator();
-    }
 
-    public Iterator<Value> postorderIterator(){
-        return new PostorderIterator();
-    }
 
     private class PostorderIterator implements Iterator<Value>{
         private SequenceList<Value> list;
