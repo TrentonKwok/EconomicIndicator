@@ -195,7 +195,6 @@ public class RankGUI extends JFrame {
                 "Select countries for Custom group",
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
-
         if(result == JOptionPane.OK_OPTION){
             SequenceList<String> selected = new SequenceList<String>(all.length);
             for(int i = 0; i < boxes.length; i++){

@@ -86,12 +86,12 @@ public class AVLTree<Key extends Comparable<Key>, Value> implements Iterable<Val
             return leftRotate(x);
         }
 
-        if(bf > 1 && balanceFactor(x.left) < 0){   // LR
+        if(bf > 1 && balanceFactor(x.left) < 0){     // LR
             x.left = leftRotate(x.left);
             return rightRotate(x);
         }
 
-        if(bf < -1 && balanceFactor(x.right) > 0){  // RL
+        if(bf < -1 && balanceFactor(x.right) > 0){    // RL
             x.right = rightRotate(x.right);
             return leftRotate(x);
         }
