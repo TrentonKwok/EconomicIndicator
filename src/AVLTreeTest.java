@@ -302,4 +302,231 @@ public class AVLTreeTest {
         }
         assertEquals(100, count);
     }
+
+    @Test
+    public void testFloorHas(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        tree.put(10, "a");
+        tree.put(20, "b");
+        tree.put(30, "c");
+        assertEquals(20, (int)tree.floor(20));
+    }
+
+    @Test
+    public void testFloorBetween(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        tree.put(10, "a");
+        tree.put(20, "b");
+        tree.put(30, "c");
+        assertEquals(20, (int)tree.floor(25));
+    }
+
+    @Test
+    public void testFloorSmallerThanAll(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        tree.put(10, "a");
+        tree.put(20, "b");
+        assertNull(tree.floor(5));
+    }
+
+    @Test
+    public void testFloorLargerThanAll(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        tree.put(10, "a");
+        tree.put(20, "b");
+        assertEquals(20, (int)tree.floor(99));
+    }
+
+    @Test
+    public void testFloorEmpty(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        assertNull(tree.floor(10));
+    }
+
+    @Test
+    public void testCeilingHas(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        tree.put(10, "a");
+        tree.put(20, "b");
+        tree.put(30, "c");
+        assertEquals(20, (int)tree.ceiling(20));
+    }
+
+    @Test
+    public void testCeilingBetween(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        tree.put(10, "a");
+        tree.put(20, "b");
+        tree.put(30, "c");
+        assertEquals(30, (int)tree.ceiling(25));
+    }
+
+    @Test
+    public void testCeilingLargerThanAll(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        tree.put(10, "a");
+        tree.put(20, "b");
+        assertNull(tree.ceiling(25));
+    }
+
+    @Test
+    public void testCeilingSmallerThanAll(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        tree.put(10, "a");
+        tree.put(20, "b");
+        assertEquals(10, (int)tree.ceiling(1));
+    }
+
+    @Test
+    public void testCeilingEmpty(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        assertNull(tree.ceiling(10));
+    }
+
+    @Test
+    public void testFloorAndCeiling(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        tree.put(10, "a");
+        tree.put(20, "b");
+        tree.put(30, "c");
+        tree.put(40, "d");
+        tree.put(50, "e");
+        assertEquals(20, (int)tree.floor(25));
+        assertEquals(30, (int)tree.ceiling(25));
+    }
+
+    @Test
+    public void testDeleteMin(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        tree.put(20, "b");
+        tree.put(10, "a");
+        tree.put(30, "c");
+        tree.deleteMin();
+        assertEquals(2, tree.size());
+        assertNull(tree.get(10));
+        assertEquals(20, (int)tree.min());
+    }
+
+    @Test
+    public void testDeleteMinEmpty(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        tree.deleteMin();
+        assertTrue(tree.isEmpty());
+    }
+
+    @Test
+    public void testDeleteMinStillBalanced(){
+        AVLTree<Integer, Integer> tree = new AVLTree<Integer, Integer>();
+        for(int i = 1; i <= 100; i++){
+            tree.put(i, i);
+        }
+        for(int i = 0; i < 50; i++){
+            tree.deleteMin();
+            assertTrue(tree.isBalanced());
+        }
+        assertEquals(50, tree.size());
+    }
+
+    @Test
+    public void testDeleteMax(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        tree.put(20, "b");
+        tree.put(10, "a");
+        tree.put(30, "c");
+        tree.deleteMax();
+        assertEquals(2, tree.size());
+        assertNull(tree.get(30));
+        assertEquals(20, (int)tree.max());
+    }
+
+    @Test
+    public void testDeleteMaxEmpty(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        tree.deleteMax();
+        assertTrue(tree.isEmpty());
+    }
+
+    @Test
+    public void testDeleteMaxStillBalanced(){
+        AVLTree<Integer, Integer> tree = new AVLTree<Integer, Integer>();
+        for(int i = 1; i <= 100; i++){
+            tree.put(i, i);
+        }
+        for(int i = 0; i < 50; i++){
+            tree.deleteMax();
+            assertTrue(tree.isBalanced());
+        }
+        assertEquals(50, tree.size());
+    }
+
+    @Test
+    public void testPreorderIterator(){
+        AVLTree<Integer, Integer> tree = new AVLTree<Integer, Integer>();
+        tree.put(20, 20);
+        tree.put(10, 10);
+        tree.put(30, 30);
+        java.util.Iterator<Integer> it = tree.preorderIterator();
+        assertEquals(20, (int)it.next());
+        assertEquals(10, (int)it.next());
+        assertEquals(30, (int)it.next());
+        assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void testPreorderIteratorEmpty(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        java.util.Iterator<String> it = tree.preorderIterator();
+        assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void testPreorderIteratorCount(){
+        AVLTree<Integer, Integer> tree = new AVLTree<Integer, Integer>();
+        for(int i = 1; i <= 50; i++){
+            tree.put(i, i);
+        }
+        java.util.Iterator<Integer> it = tree.preorderIterator();
+        int count = 0;
+        while(it.hasNext()){
+            it.next();
+            count++;
+        }
+        assertEquals(50, count);
+    }
+
+    @Test
+    public void testPostorderIterator(){
+        AVLTree<Integer, Integer> tree = new AVLTree<Integer, Integer>();
+        tree.put(20, 20);
+        tree.put(10, 10);
+        tree.put(30, 30);
+        java.util.Iterator<Integer> it = tree.postorderIterator();
+        assertEquals(10, (int)it.next());
+        assertEquals(30, (int)it.next());
+        assertEquals(20, (int)it.next());
+        assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void testPostorderIteratorEmpty(){
+        AVLTree<Integer, String> tree = new AVLTree<Integer, String>();
+        java.util.Iterator<String> it = tree.postorderIterator();
+        assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void testPostorderIteratorCount(){
+        AVLTree<Integer, Integer> tree = new AVLTree<Integer, Integer>();
+        for(int i = 1; i <= 50; i++){
+            tree.put(i, i);
+        }
+        java.util.Iterator<Integer> it = tree.postorderIterator();
+        int count = 0;
+        while(it.hasNext()){
+            it.next();
+            count++;
+        }
+        assertEquals(50, count);
+    }
+
 }

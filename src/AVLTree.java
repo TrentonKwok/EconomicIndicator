@@ -18,6 +18,24 @@ public class AVLTree<Key extends Comparable<Key>, Value> implements Iterable<Val
         }
     }
 
+    public boolean isBalanced(){
+        return isBalanced(root);
+    }
+
+    private boolean isBalanced(Node x){
+        if(x == null){
+            return true;
+        }
+
+        int bf = balanceFactor(x);
+
+        if(bf < -1 || bf > 1){
+            return false;
+        }
+
+        return isBalanced(x.left) && isBalanced(x.right);
+    }
+
     public int size(){
         return N;
     }
@@ -78,20 +96,20 @@ public class AVLTree<Key extends Comparable<Key>, Value> implements Iterable<Val
         updateHeight(x);
         int bf = balanceFactor(x);
 
-        if(bf > 1 && balanceFactor(x.left) >= 0){      // LL
+        if(bf > 1 && balanceFactor(x.left) >= 0){           // LL
             return rightRotate(x);
         }
 
-        if(bf < -1 && balanceFactor(x.right) <= 0){   // RR
+        if(bf < -1 && balanceFactor(x.right) <= 0){         // RR
             return leftRotate(x);
         }
 
-        if(bf > 1 && balanceFactor(x.left) < 0){     // LR
+        if(bf > 1 && balanceFactor(x.left) < 0){            // LR
             x.left = leftRotate(x.left);
             return rightRotate(x);
         }
 
-        if(bf < -1 && balanceFactor(x.right) > 0){    // RL
+        if(bf < -1 && balanceFactor(x.right) > 0){          // RL
             x.right = rightRotate(x.right);
             return leftRotate(x);
         }
@@ -277,17 +295,111 @@ public class AVLTree<Key extends Comparable<Key>, Value> implements Iterable<Val
 
         String result = "";
         result = result + printTree(x.left, level + 1);
+
         for (int i = 0; i < level; i++){
             result = result + "              ";
         }
-
         result = result + "--| " + x.key + "\n";
+
         result = result + printTree(x.right, level + 1);
 
         return result;
     }
 
-    public Iterator<Value> iterator() {
+    public Key floor(Key key){
+        Node x = floor(root, key);
+        if(x == null){
+            return null;
+        }
+        return x.key;
+    }
+
+    private Node floor(Node x, Key key){
+        if(x == null){
+            return null;
+        }
+
+        int cmp = key.compareTo(x.key);
+
+        if(cmp == 0){
+            return x;
+        }
+
+        if(cmp < 0){
+            return floor(x.left, key);
+        }
+
+        Node t = floor(x.right, key);
+        if(t != null){
+            return t;
+        }
+        return x;
+    }
+
+    public Key ceiling(Key key){
+        Node x = ceiling(root, key);
+        if(x == null){
+            return null;
+        }
+        return x.key;
+    }
+
+    private Node ceiling(Node x, Key key){
+        if(x == null){
+            return null;
+        }
+
+        int cmp = key.compareTo(x.key);
+
+        if(cmp == 0){
+            return x;
+        }
+
+        if(cmp > 0){
+            return ceiling(x.right, key);
+        }
+
+        Node t = ceiling(x.left, key);
+        if(t != null){
+            return t;
+        }
+        return x;
+    }
+
+    public void deleteMin(){
+        if(root == null){
+            return;
+        }
+        root = deleteMin(root);
+    }
+
+    private Node deleteMin(Node x){
+        if(x.left == null){
+            N--;
+            return x.right;
+        }
+        x.left = deleteMin(x.left);
+        return rebalance(x);
+    }
+
+    public void deleteMax(){
+        if(root == null){
+            return;
+        }
+        root = deleteMax(root);
+    }
+
+    private Node deleteMax(Node x){
+        if(x.right == null){
+            N--;
+            return x.left;
+        }
+        x.right = deleteMax(x.right);
+        return rebalance(x);
+    }
+
+
+    public Iterator<Value> iterator() {   // The default would be InorderIterator
         return new InorderIterator();
     }
 
@@ -317,5 +429,73 @@ public class AVLTree<Key extends Comparable<Key>, Value> implements Iterable<Val
         }
     }
 
+    private class PreorderIterator implements Iterator<Value>{
+        private SequenceList<Node> stack;
+
+        public PreorderIterator(){
+            stack = new SequenceList<>(height() + 1);
+            if(root != null){
+                stack.insert(root);
+            }
+        }
+
+        public boolean hasNext(){
+            return stack.length() > 0;
+        }
+
+        public Value next(){
+            Node x = stack.remove(stack.length() - 1);
+
+            if(x.right != null){
+                stack.insert(x.right);
+            }
+            if(x.left != null){
+                stack.insert(x.left);
+            }
+
+            return x.value;
+        }
+    }
+
+    public Iterator<Value> preorderIterator(){
+        return new PreorderIterator();
+    }
+
+    public Iterator<Value> postorderIterator(){
+        return new PostorderIterator();
+    }
+
+    private class PostorderIterator implements Iterator<Value>{
+        private SequenceList<Value> list;
+        private int cursor;
+
+        public PostorderIterator(){
+            list = new SequenceList<>(N + 1);
+            cursor = 0;
+            buildList(root);
+        }
+
+        private void buildList(Node x){
+            if(x == null){
+                return;
+            }
+            buildList(x.left);
+            buildList(x.right);
+            list.insert(x.value);
+        }
+
+        public boolean hasNext(){
+            return cursor < list.length();
+        }
+
+        public Value next(){
+            Value v = list.get(cursor);
+            cursor++;
+            return v;
+        }
+    }
 
 }
+
+
+
